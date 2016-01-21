@@ -1,0 +1,1 @@
+* Python - collected script parts
