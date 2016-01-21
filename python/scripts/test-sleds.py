@@ -142,8 +142,6 @@ def main():
         if value == 'off':
             powered_off.append(k)
 
-    print(powered_off)
-
     message = """
 Total Hosts: {lb}
 Found {to} powered off. Estimating run time for tests at {ttc} mins.
@@ -159,7 +157,7 @@ Starting test on powered off sleds.
         m = ManageIP(server).mgt_ip()
         print("Testing: {s}, waiting {bd} seconds for boot.".format(s=b,
               bd=boot_delay))
-        mgt_pipe.execute('{c} {i} on'.format(c=bmc-power, i=b))
+        mgt_pipe.execute('{c} {i} on'.format(c=bmc_power, i=b))
         time.sleep(boot_delay)
 
         try:
@@ -177,14 +175,17 @@ Starting test on powered off sleds.
         print("Test completed for {server}, attempting graceful shutdown."
               .format(server=m))
         sled.execute('sudo /sbin/shutdown -h now')
-        sled_status = mgt_pipe.execute("{c} {i} status".format(c=bmc-power,
-                                       i=b))
+        time.sleep(shutdown_delay)
+        sled_status = mgt_pipe.execute("{c} {i} status".format(c=bmc_power,
+                                       i=b)).split(' ')[3].strip()
+
         if sled_status == 'on':
             print("Sled failed to shutdown cleanly, powering off.")
-            mgt_pipe.execute("{c} {i} off".format(c=bmc-power, i=b))
+            mgt_pipe.execute("{c} {i} off".format(c=bmc_power, i=b))
             time.sleep(shutdown_delay)
-        sled_status = mgt_pipe.execute("{c}{i} status".format(c=bmc-power,
-                                       i=b))
+
+        sled_status = mgt_pipe.execute("{c}{i} status".format(c=bmc_power,
+                                       i=b)).split(' ')[3].strip()
         host_summary[m].append("current power status {}".format(sled_status))
         sled.close()
 

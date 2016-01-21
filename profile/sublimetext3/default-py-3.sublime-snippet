@@ -1,0 +1,20 @@
+<snippet>
+    <content><![CDATA[#!/usr/bin/python
+
+
+def main():
+    pass
+
+
+if __name__ == '__main':
+    main()
+
+]]>
+
+</content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>dpy3</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.python</scope>
+    <description>Default Python Snippet</description>
+</snippet>
